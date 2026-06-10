@@ -3,105 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kapsul Waktu Amiq</title>
+    <title>✨ Kapsul Waktu ✨</title>
     <style>
         :root {
-            --bg-dark: #090b11;
-            --card-dark: #121622;
-            --purple-light: #ba8fff;
-            --purple-btn: #6e41e2;
-            --text-white: #ffffff;
-            --text-gray: #8b949e;
+            --bg-dark: #070913;
+            --card-glass: rgba(20, 26, 44, 0.65);
+            --border-neon: rgba(186, 143, 255, 0.12);
+            --purple-glow: #ba8fff;
+            --purple-gradient: linear-gradient(135deg, #8a4fff 0%, #6e41e2 100%);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-dark);
-            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 0);
-            background-size: 24px 24px;
-            color: var(--text-white);
+            color: var(--text-main);
             margin: 0;
-            padding: 0;
-            padding-bottom: 50px;
+            padding-bottom: 80px;
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
         }
 
+        /* EFEK BACKGROUND ANIMASI */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* NAVBAR SAKRAL */
         .navbar {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            padding: 12px 24px;
-            background-color: rgba(9, 11, 17, 0.8);
-            border-bottom: 1px solid #1f2433;
+            padding: 20px 24px;
+            background-color: rgba(7, 9, 19, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             position: sticky;
             top: 0;
             z-index: 10;
         }
 
-        .nav-left { display: flex; flex-direction: column; }
-        .user-tag { font-size: 11px; color: var(--text-gray); }
-        .brand-title { font-weight: bold; font-size: 18px; }
-        .nav-right { display: flex; gap: 8px; }
-        .btn-nav { background-color: #1a2030; border: 1px solid #2d3548; color: white; padding: 8px 12px; border-radius: 6px; cursor: pointer; }
-        .btn-nav.docs { font-size: 12px; }
-
-        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-        .hero-section { text-align: center; margin: 40px 0; }
-        .main-title { font-size: 36px; font-weight: 800; color: var(--purple-light); margin: 0 0 10px 0; }
-        .subtitle { font-size: 16px; color: var(--text-gray); margin: 0 0 25px 0; }
-
-        .btn-tambah-momen {
-            background-color: var(--purple-btn);
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(110, 65, 226, 0.4);
+        .brand-title { 
+            font-weight: 800; 
+            font-size: 20px; 
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #fff, #ba8fff, #fff); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
         }
 
-        .grid-memori { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .card-memori { background-color: var(--card-dark); border-radius: 20px; overflow: hidden; border: 1px solid #1f2538; display: flex; flex-direction: column; }
-        .card-memori img { width: 100%; height: 220px; object-fit: cover; }
-        .card-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
-        .card-date { font-size: 13px; color: var(--purple-light); margin-bottom: 8px; }
-        .card-content h3 { margin: 0 0 8px 0; font-size: 20px; }
-        .card-content p { margin: 0 0 20px 0; color: var(--text-gray); font-size: 14px; line-height: 1.6; flex-grow: 1; }
+        /* HERO UTAMA DENGAN ORNAMEN */
+        .container { max-width: 1050px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+        .hero-section { text-align: center; margin: 70px 0 50px 0; }
         
-        .btn-hapus { background-color: #e03e3e; color: white; border: none; padding: 10px; border-radius: 10px; cursor: pointer; font-weight: 600; width: 100%; }
+        .badge-info {
+            display: inline-block;
+            background: rgba(186, 143, 255, 0.08);
+            border: 1px solid rgba(186, 143, 255, 0.2);
+            color: var(--purple-glow);
+            padding: 6px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 50px;
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(186, 143, 255, 0.05);
+        }
 
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 100; }
-        .modal-content { background-color: var(--card-dark); padding: 25px; border-radius: 20px; width: 85%; max-width: 400px; border: 1px solid #2d3548; }
-        .modal-content input, .modal-content textarea { width: 100%; background-color: #181d2c; border: 1px solid #2d3548; color: white; padding: 12px; border-radius: 10px; margin-bottom: 15px; box-sizing: border-box; }
-        .file-label { display: block; background-color: #1d2436; border: 1px dashed var(--purple-light); padding: 12px; text-align: center; border-radius: 10px; cursor: pointer; margin-bottom: 15px; }
+        .main-title { font-size: 46px; font-weight: 900; letter-spacing: -1.5px; margin: 0 0 12px 0; background: linear-gradient(135deg, #ffffff 40%, #ba8fff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { font-size: 16px; color: var(--text-muted); margin: 0 0 35px 0; font-weight: 400; line-height: 1.5; }
+
+        .btn-tambah-momen {
+            background: var(--purple-gradient);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 10px 35px rgba(110, 65, 226, 0.45);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        }
+        .btn-tambah-momen:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 45px rgba(110, 65, 226, 0.6);
+        }
+
+        /* GRID DENGAN EFEK ELEGAN */
+        .grid-memori { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 32px; }
+        
+        .card-memori { 
+            background: var(--card-glass); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 28px; 
+            overflow: hidden; 
+            border: 1px solid var(--border-neon); 
+            display: flex; 
+            flex-direction: column; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .card-memori:hover {
+            transform: translateY(-8px);
+            border-color: rgba(186, 143, 255, 0.4);
+            box-shadow: 0 20px 40px rgba(110, 65, 226, 0.15), 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+        
+        .image-wrapper { width: 100%; height: 250px; overflow: hidden; position: relative; }
+        .card-memori img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .card-memori:hover img { transform: scale(1.05); }
+
+        .card-content { padding: 26px; display: flex; flex-direction: column; flex-grow: 1; }
+        .card-date { font-size: 12px; font-weight: 700; color: var(--purple-glow); letter-spacing: 0.8px; margin-bottom: 12px; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
+        .card-content h3 { margin: 0 0 10px 0; font-size: 22px; font-weight: 800; line-height: 1.3; color: #ffffff; }
+        .card-content p { margin: 0 0 26px 0; color: var(--text-muted); font-size: 14px; line-height: 1.6; flex-grow: 1; }
+        
+        .btn-hapus { background: rgba(224, 62, 62, 0.08); color: #ff6b6b; border: 1px solid rgba(224, 62, 62, 0.15); padding: 13px; border-radius: 16px; cursor: pointer; font-weight: 700; font-size: 14px; width: 100%; transition: 0.2s; }
+        .btn-hapus:hover { background: #e03e3e; color: white; border-color: #e03e3e; box-shadow: 0 6px 20px rgba(224, 62, 62, 0.25); }
+
+        /* FORM POPUP MODAL */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(5, 7, 13, 0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; justify-content: center; align-items: center; z-index: 100; }
+        .modal-content { background: rgba(16, 21, 37, 0.98); border: 1px solid rgba(186, 143, 255, 0.25); padding: 36px; border-radius: 32px; width: 88%; max-width: 420px; box-shadow: 0 30px 60px rgba(0,0,0,0.6); }
+        .modal-content h3 { margin-top: 0; margin-bottom: 26px; font-size: 24px; font-weight: 800; text-align: center; background: linear-gradient(to right, #fff, #ba8fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .modal-content input, .modal-content textarea { width: 100%; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: white; padding: 16px; border-radius: 16px; margin-bottom: 20px; font-size: 15px; box-sizing: border-box; transition: 0.2s; }
+        .modal-content input:focus, .modal-content textarea:focus { outline: none; border-color: var(--purple-glow); background: rgba(255, 255, 255, 0.06); box-shadow: 0 0 15px rgba(186, 143, 255, 0.1); }
+        
+        .file-label { display: block; background: rgba(186, 143, 255, 0.04); border: 2px dashed rgba(186, 143, 255, 0.25); padding: 18px; text-align: center; border-radius: 16px; cursor: pointer; font-weight: 700; color: var(--purple-glow); margin-bottom: 20px; transition: 0.2s; }
+        .file-label:hover { background: rgba(186, 143, 255, 0.08); border-color: var(--purple-glow); }
         input[type="file"] { display: none; }
-        #preview-container img { width: 100%; max-height: 150px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; }
-        .modal-buttons { display: flex; gap: 10px; }
-        .btn-save { background-color: var(--purple-btn); color: white; border: none; padding: 12px; border-radius: 10px; flex: 2; font-weight: bold; cursor: pointer; }
-        .btn-cancel { background-color: #2a3142; color: white; border: none; padding: 12px; border-radius: 10px; flex: 1; cursor: pointer; }
+        
+        #preview-container img { width: 100%; max-height: 190px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.08); }
+        .modal-buttons { display: flex; gap: 14px; }
+        .btn-save { background: var(--purple-gradient); color: white; border: none; padding: 15px; border-radius: 16px; flex: 2; font-weight: 700; font-size: 15px; cursor: pointer; box-shadow: 0 5px 20px rgba(110, 65, 226, 0.3); }
+        .btn-cancel { background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255, 255, 255, 0.08); padding: 15px; border-radius: 16px; flex: 1; font-weight: 600; font-size: 15px; cursor: pointer; transition: 0.2s; }
+        .btn-cancel:hover { background: rgba(255, 255, 255, 0.1); }
+        
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
+    <canvas id="bg-canvas"></canvas>
+
     <header class="navbar">
-        <div class="nav-left">
-            <span class="user-tag">Amiq Pake q</span>
-            <span class="brand-title">Kapsul Waktu</span>
-        </div>
-        <div class="nav-right">
-            <button class="btn-nav">❤️</button>
-            <button class="btn-nav docs">View Source Code</button>
-            <button class="btn-nav">🔖</button>
-        </div>
+        <div class="brand-title"> Nanda</div>
     </header>
 
     <div class="container">
         <div class="hero-section">
+            <div id="counter-momen" class="badge-info">✨ Memuat Kapsul...</div>
             <h1 class="main-title">✨ Kapsul Waktu ✨</h1>
-            <p class="subtitle">Tempat menyimpan semua memori</p>
-            <button id="btn-buka-modal" class="btn-tambah-momen">📸 Tambah Momen Baru</button>
+            <p class="subtitle">Tempat abadi untuk mengunci seluruh memori indahmu secara aman</p>
+            <button id="btn-buka-modal" class="btn-tambah-momen">📸 Kunci Momen Baru</button>
         </div>
         <div id="daftar-memori" class="grid-memori"></div>
     </div>
@@ -109,11 +174,11 @@
     <div id="modal-input" class="modal hidden">
         <div class="modal-content">
             <h3>🔒 Kunci Momen Baru</h3>
-            <input type="text" id="judul" placeholder="Momen Spesial...">
-            <textarea id="cerita" rows="3" placeholder="Tidak ada catatan."></textarea>
+            <input type="text" id="judul" placeholder="Judul Momen Spesial...">
+            <textarea id="cerita" rows="3" placeholder="Tulis cerita atau deskripsi kenangan ini..."></textarea>
             
             <label class="file-label">
-                📂 Pilih File Foto
+                📂 Ambil Gambar / Foto
                 <input type="file" id="foto" accept="image/*">
             </label>
             
@@ -129,6 +194,72 @@
     </div>
 
     <script>
+        // KODE LOGIKA ANIMASI BACKGROUND PARTIKEL
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let partikelArray = [];
+
+        function aturUkuranCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        aturUkuranCanvas();
+        window.addEventListener('resize', aturUkuranCanvas);
+
+        class Partikel {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.ukuran = Math.random() * 2 + 0.5;
+                this.kecepatanY = Math.random() * 0.4 + 0.1; // Bergerak pelan ke bawah
+                this.kecepatanX = Math.random() * 0.1 - 0.05;
+                this.alpha = Math.random() * 0.5 + 0.2;
+            }
+            update() {
+                this.y += this.kecepatanY;
+                this.x += this.kecepatanX;
+                if (this.y > canvas.height) {
+                    this.y = 0;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.fillStyle = `rgba(186, 143, 255, ${this.alpha})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.ukuran, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function inisialisasiPartikel() {
+            partikelArray = [];
+            const jumlahPartikel = Math.min(60, window.innerWidth / 10); // Menyesuaikan layar HP/Laptop
+            for (let i = 0; i < jumlahPartikel; i++) {
+                partikelArray.push(new Partikel());
+            }
+        }
+        inisialisasiPartikel();
+
+        function animasiBackground() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Tambahkan gradasi latar belakang dasar lewat canvas agar lebih halus
+            let gradasi = ctx.createRadialGradient(canvas.width/2, 0, 10, canvas.width/2, 0, canvas.height);
+            gradasi.addColorStop(0, '#120d2b');
+            gradasi.addColorStop(1, '#070913');
+            ctx.fillStyle = gradasi;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < partikelArray.length; i++) {
+                partikelArray[i].update();
+                partikelArray[i].draw();
+            }
+            requestAnimationFrame(animasiBackground);
+        }
+        animasiBackground();
+
+
+        // LOGIKA CORE KAPSUL WAKTU
         const modalInput = document.getElementById('modal-input');
         const btnBukaModal = document.getElementById('btn-buka-modal');
         const btnBatal = document.getElementById('btn-batal');
@@ -140,6 +271,7 @@
         const previewContainer = document.getElementById('preview-container');
         const previewFoto = document.getElementById('preview-foto');
         const daftarMemoriDiv = document.getElementById('daftar-memori');
+        const counterMomen = document.getElementById('counter-momen');
 
         let fotoBase64 = "";
 
@@ -202,17 +334,22 @@
             const kumpulanMemori = JSON.parse(localStorage.getItem('kapsulWaktuGitHub')) || [];
 
             if (kumpulanMemori.length === 0) {
-                daftarMemoriDiv.innerHTML = `<p style="color:#555; grid-column: 1/-1; text-align:center; margin-top:30px;">Belum ada momen terkunci. Ayo tambah foto memorimu!</p>`;
+                counterMomen.innerText = "🔒 Kapsul Masih Kosong";
+                daftarMemoriDiv.innerHTML = `<p style="color:#6b7280; grid-column: 1/-1; text-align:center; margin-top:40px; font-size:15px; letter-spacing: 0.5px;">Belum ada momen terkunci. Ayo abadikan foto memorimu hari ini!</p>`;
                 return;
+            } else {
+                counterMomen.innerText = `🔒 ${kumpulanMemori.length} Momen Terkunci Abadi`;
             }
 
-            kumpulanMemori.reverse().forEach(memori => {
+            [...kumpulanMemori].reverse().forEach(memori => {
                 const card = document.createElement('div');
                 card.classList.add('card-memori');
                 card.innerHTML = `
-                    <img src="${memori.foto}">
+                    <div class="image-wrapper">
+                        <img src="${memori.foto}">
+                    </div>
                     <div class="card-content">
-                        <div class="card-date">📅 ${memori.tanggal}</div>
+                        <div class="card-date">🗓️ ${memori.tanggal}</div>
                         <h3>${memori.judul}</h3>
                         <p>${memori.cerita}</p>
                         <button class="btn-hapus" onclick="hapusMemori(${memori.id})">🗑️ Hapus Momen</button>
@@ -223,7 +360,7 @@
         }
 
         window.hapusMemori = function(id) {
-            if(confirm("Hapus kenangan ini?")) {
+            if(confirm("Apakah kamu yakin ingin menghapus kenangan indah ini?")) {
                 let kumpulanMemori = JSON.parse(localStorage.getItem('kapsulWaktuGitHub')) || [];
                 kumpulanMemori = kumpulanMemori.filter(m => m.id !== id);
                 localStorage.setItem('kapsulWaktuGitHub', JSON.stringify(kumpulanMemori));

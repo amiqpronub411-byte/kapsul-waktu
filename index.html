@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kapsul Waktu Amiq</title>
+    <style>
+        :root {
+            --bg-dark: #090b11;
+            --card-dark: #121622;
+            --purple-light: #ba8fff;
+            --purple-btn: #6e41e2;
+            --text-white: #ffffff;
+            --text-gray: #8b949e;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 0);
+            background-size: 24px 24px;
+            color: var(--text-white);
+            margin: 0;
+            padding: 0;
+            padding-bottom: 50px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 24px;
+            background-color: rgba(9, 11, 17, 0.8);
+            border-bottom: 1px solid #1f2433;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav-left { display: flex; flex-direction: column; }
+        .user-tag { font-size: 11px; color: var(--text-gray); }
+        .brand-title { font-weight: bold; font-size: 18px; }
+        .nav-right { display: flex; gap: 8px; }
+        .btn-nav { background-color: #1a2030; border: 1px solid #2d3548; color: white; padding: 8px 12px; border-radius: 6px; cursor: pointer; }
+        .btn-nav.docs { font-size: 12px; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        .hero-section { text-align: center; margin: 40px 0; }
+        .main-title { font-size: 36px; font-weight: 800; color: var(--purple-light); margin: 0 0 10px 0; }
+        .subtitle { font-size: 16px; color: var(--text-gray); margin: 0 0 25px 0; }
+
+        .btn-tambah-momen {
+            background-color: var(--purple-btn);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(110, 65, 226, 0.4);
+        }
+
+        .grid-memori { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .card-memori { background-color: var(--card-dark); border-radius: 20px; overflow: hidden; border: 1px solid #1f2538; display: flex; flex-direction: column; }
+        .card-memori img { width: 100%; height: 220px; object-fit: cover; }
+        .card-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
+        .card-date { font-size: 13px; color: var(--purple-light); margin-bottom: 8px; }
+        .card-content h3 { margin: 0 0 8px 0; font-size: 20px; }
+        .card-content p { margin: 0 0 20px 0; color: var(--text-gray); font-size: 14px; line-height: 1.6; flex-grow: 1; }
+        
+        .btn-hapus { background-color: #e03e3e; color: white; border: none; padding: 10px; border-radius: 10px; cursor: pointer; font-weight: 600; width: 100%; }
+
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 100; }
+        .modal-content { background-color: var(--card-dark); padding: 25px; border-radius: 20px; width: 85%; max-width: 400px; border: 1px solid #2d3548; }
+        .modal-content input, .modal-content textarea { width: 100%; background-color: #181d2c; border: 1px solid #2d3548; color: white; padding: 12px; border-radius: 10px; margin-bottom: 15px; box-sizing: border-box; }
+        .file-label { display: block; background-color: #1d2436; border: 1px dashed var(--purple-light); padding: 12px; text-align: center; border-radius: 10px; cursor: pointer; margin-bottom: 15px; }
+        input[type="file"] { display: none; }
+        #preview-container img { width: 100%; max-height: 150px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; }
+        .modal-buttons { display: flex; gap: 10px; }
+        .btn-save { background-color: var(--purple-btn); color: white; border: none; padding: 12px; border-radius: 10px; flex: 2; font-weight: bold; cursor: pointer; }
+        .btn-cancel { background-color: #2a3142; color: white; border: none; padding: 12px; border-radius: 10px; flex: 1; cursor: pointer; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="nav-left">
+            <span class="user-tag">Amiq Pake q</span>
+            <span class="brand-title">Kapsul Waktu</span>
+        </div>
+        <div class="nav-right">
+            <button class="btn-nav">❤️</button>
+            <button class="btn-nav docs">View Source Code</button>
+            <button class="btn-nav">🔖</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="hero-section">
+            <h1 class="main-title">✨ Kapsul Waktu ✨</h1>
+            <p class="subtitle">Tempat menyimpan semua memori</p>
+            <button id="btn-buka-modal" class="btn-tambah-momen">📸 Tambah Momen Baru</button>
+        </div>
+        <div id="daftar-memori" class="grid-memori"></div>
+    </div>
+
+    <div id="modal-input" class="modal hidden">
+        <div class="modal-content">
+            <h3>🔒 Kunci Momen Baru</h3>
+            <input type="text" id="judul" placeholder="Momen Spesial...">
+            <textarea id="cerita" rows="3" placeholder="Tidak ada catatan."></textarea>
+            
+            <label class="file-label">
+                📂 Pilih File Foto
+                <input type="file" id="foto" accept="image/*">
+            </label>
+            
+            <div id="preview-container" class="hidden">
+                <img id="preview-foto" src="" alt="Pratinjau">
+            </div>
+
+            <div class="modal-buttons">
+                <button id="btn-simpan" class="btn-save">Simpan Kenangan</button>
+                <button id="btn-batal" class="btn-cancel">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modalInput = document.getElementById('modal-input');
+        const btnBukaModal = document.getElementById('btn-buka-modal');
+        const btnBatal = document.getElementById('btn-batal');
+        const btnSimpan = document.getElementById('btn-simpan');
+
+        const inputJudul = document.getElementById('judul');
+        const inputCerita = document.getElementById('cerita');
+        const inputFoto = document.getElementById('foto');
+        const previewContainer = document.getElementById('preview-container');
+        const previewFoto = document.getElementById('preview-foto');
+        const daftarMemoriDiv = document.getElementById('daftar-memori');
+
+        let fotoBase64 = "";
+
+        btnBukaModal.addEventListener('click', () => modalInput.classList.remove('hidden'));
+        btnBatal.addEventListener('click', tutupModal);
+
+        function tutupModal() {
+            modalInput.classList.add('hidden');
+            inputJudul.value = "";
+            inputCerita.value = "";
+            inputFoto.value = "";
+            fotoBase64 = "";
+            previewContainer.classList.add('hidden');
+        }
+
+        inputFoto.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewFoto.src = e.target.result;
+                    fotoBase64 = e.target.result;
+                    previewContainer.classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        btnSimpan.addEventListener('click', function() {
+            const judul = inputJudul.value.trim() || "Momen Spesial";
+            const cerita = inputCerita.value.trim() || "Tidak ada catatan.";
+
+            if (!fotoBase64) {
+                alert("Silakan pilih foto terlebih dahulu!");
+                return;
+            }
+
+            const opsiTanggal = { day: 'numeric', month: 'long', year: 'numeric' };
+            const tanggalHariIni = new Date().toLocaleDateString('id-ID', opsiTanggal);
+
+            let kumpulanMemori = JSON.parse(localStorage.getItem('kapsulWaktuGitHub')) || [];
+
+            const memoriBaru = {
+                id: +new Date(),
+                judul: judul,
+                cerita: cerita,
+                tanggal: tanggalHariIni,
+                foto: fotoBase64
+            };
+
+            kumpulanMemori.push(memoriBaru);
+            localStorage.setItem('kapsulWaktuGitHub', JSON.stringify(kumpulanMemori));
+
+            tutupModal();
+            tampilkanMemori();
+        });
+
+        function tampilkanMemori() {
+            daftarMemoriDiv.innerHTML = "";
+            const kumpulanMemori = JSON.parse(localStorage.getItem('kapsulWaktuGitHub')) || [];
+
+            if (kumpulanMemori.length === 0) {
+                daftarMemoriDiv.innerHTML = `<p style="color:#555; grid-column: 1/-1; text-align:center; margin-top:30px;">Belum ada momen terkunci. Ayo tambah foto memorimu!</p>`;
+                return;
+            }
+
+            kumpulanMemori.reverse().forEach(memori => {
+                const card = document.createElement('div');
+                card.classList.add('card-memori');
+                card.innerHTML = `
+                    <img src="${memori.foto}">
+                    <div class="card-content">
+                        <div class="card-date">📅 ${memori.tanggal}</div>
+                        <h3>${memori.judul}</h3>
+                        <p>${memori.cerita}</p>
+                        <button class="btn-hapus" onclick="hapusMemori(${memori.id})">🗑️ Hapus Momen</button>
+                    </div>
+                `;
+                daftarMemoriDiv.appendChild(card);
+            });
+        }
+
+        window.hapusMemori = function(id) {
+            if(confirm("Hapus kenangan ini?")) {
+                let kumpulanMemori = JSON.parse(localStorage.getItem('kapsulWaktuGitHub')) || [];
+                kumpulanMemori = kumpulanMemori.filter(m => m.id !== id);
+                localStorage.setItem('kapsulWaktuGitHub', JSON.stringify(kumpulanMemori));
+                tampilkanMemori();
+            }
+        }
+
+        tampilkanMemori();
+    </script>
+</body>
+</html>

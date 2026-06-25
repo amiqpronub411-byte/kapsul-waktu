@@ -1,0 +1,278 @@
+:root {
+    --bg-dark: #090b11;
+    --card-dark: #121622;
+    --purple-light: #ba8fff;
+    --purple-btn: #6e41e2;
+    --text-white: #ffffff;
+    --text-gray: #8b949e;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-dark);
+    /* Efek bintik-bintik halus latar belakang seperti di CodePen */
+    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 0);
+    background-size: 24px 24px;
+    color: var(--text-white);
+    margin: 0;
+    padding: 0;
+    padding-bottom: 50px;
+}
+
+/* NAVBAR ATAS */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+    background-color: rgba(9, 11, 17, 0.8);
+    border-bottom: 1px solid #1f2433;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.nav-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-tag {
+    font-size: 11px;
+    color: var(--text-gray);
+}
+
+.brand-title {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.nav-right {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-nav {
+    background-color: #1a2030;
+    border: 1px solid #2d3548;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-nav.docs {
+    font-size: 12px;
+}
+
+/* HERO SECTION */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.hero-section {
+    text-align: center;
+    margin: 60px 0;
+}
+
+.main-title {
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--purple-light);
+    margin: 0 0 10px 0;
+    letter-spacing: -1px;
+}
+
+.subtitle {
+    font-size: 18px;
+    color: var(--text-gray);
+    margin: 0 0 30px 0;
+}
+
+.btn-tambah-momen {
+    background-color: var(--purple-btn);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(110, 65, 226, 0.4);
+    transition: 0.3s ease;
+}
+
+.btn-tambah-momen:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(110, 65, 226, 0.7);
+}
+
+/* GRID & KARTU MEMORI PERSIS SCREENSHOT */
+.grid-memori {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+.card-memori {
+    background-color: var(--card-dark);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid #1f2538;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: 0.3s;
+}
+
+.card-memori:hover {
+    transform: translateY(-5px);
+}
+
+.card-memori img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.card-date {
+    font-size: 13px;
+    color: var(--purple-light);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.card-content h3 {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.card-content p {
+    margin: 0 0 20px 0;
+    color: var(--text-gray);
+    font-size: 14px;
+    line-height: 1.6;
+    flex-grow: 1;
+}
+
+/* Tombol Hapus Merah di Bagian Bawah Kartu */
+.btn-hapus {
+    background-color: #e03e3e;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    width: 100%;
+    transition: 0.2s;
+}
+
+.btn-hapus:hover {
+    background-color: #b82828;
+}
+
+/* POP-UP MODAL BOX */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.modal-content {
+    background-color: var(--card-dark);
+    padding: 30px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 450px;
+    border: 1px solid #2d3548;
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: var(--purple-light);
+}
+
+.modal-content input, .modal-content textarea {
+    width: 100%;
+    background-color: #181d2c;
+    border: 1px solid #2d3548;
+    color: white;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+.file-label {
+    display: block;
+    background-color: #1d2436;
+    border: 1px dashed var(--purple-light);
+    padding: 15px;
+    text-align: center;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+#preview-container img {
+    width: 100%;
+    max-height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-save {
+    background-color: var(--purple-btn);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    flex: 2;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-cancel {
+    background-color: #2a3142;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    flex: 1;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none !important;
+}

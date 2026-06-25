@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kapsul Waktu Cyber-Cosmic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #02040a;
+            --bg-card: rgba(10, 15, 30, 0.6);
+            --card-border: rgba(168, 85, 247, 0.15);
+            --purple-glow: #c084fc;
+            --purple-gradient: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --accent-gold: #fbbf24;
+            
+            /* AMBIENT GLOW KATEGORI */
+            --glow-liburan: #22d3ee;
+            --glow-kuliah: #a855f7;
+            --glow-olahraga: #4ade80;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        /* SCROLLBAR PREMIUM FUTURISTIK */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #02040a; }
+        ::-webkit-scrollbar-thumb { background: rgba(168, 85, 247, 0.25); border-radius: 100px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(168, 85, 247, 0.5); box-shadow: 0 0 10px var(--purple-glow); }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            padding-bottom: 80px;
+            overflow-x: hidden;
+            letter-spacing: -0.2px;
+        }
+
+        /* CYBERPUNK BACKGROUND GRID OVERLAY */
+        body::before {
+            content: "";
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: linear-gradient(rgba(168, 85, 247, 0.02) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(168, 85, 247, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -2; pointer-events: none;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove {
+            from { background-position: 0 0; }
+            to { background-position: 50px 50px; }
+        }
+
+        /* LIQUID MESH NEBULA LAYER BACKGROUND */
+        #mesh-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: 
+                radial-gradient(at 10% 20%, rgba(168, 85, 247, 0.12) 0px, transparent 40%),
+                radial-gradient(at 90% 80%, rgba(34, 211, 238, 0.12) 0px, transparent 40%),
+                radial-gradient(at 50% 50%, rgba(74, 222, 128, 0.04) 0px, transparent 50%);
+            filter: blur(60px); z-index: -3; pointer-events: none;
+            animation: liquidNebula 25s infinite alternate ease-in-out;
+        }
+        @keyframes liquidNebula {
+            0% { transform: scale(1) translate(0px, 0px); }
+            50% { transform: scale(1.15) translate(40px, -60px); }
+            100% { transform: scale(0.9) translate(-30px, 30px); }
+        }
+
+        #bg-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
+        }
+
+        /* CUSTOM GLOW CURSOR */
+        #custom-cursor {
+            position: fixed; width: 8px; height: 8px; background: #fff;
+            border-radius: 50%; pointer-events: none; z-index: 999999;
+            box-shadow: 0 0 15px #fff, 0 0 30px var(--purple-glow);
+            transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s;
+        }
+
+        /* TOAST NOTIFICATION */
+        .toast-container { position: fixed; top: 24px; right: 24px; z-index: 99999; display: flex; flex-direction: column; gap: 10px; }
+        .custom-toast {
+            background: rgba(10, 15, 30, 0.8); backdrop-filter: blur(16px); border: 1px solid var(--card-border); padding: 14px 24px;
+            border-radius: 14px; color: white; font-size: 14px; font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 10px;
+            transform: translateX(120%); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .custom-toast.show { transform: translateX(0); }
+        .toast-success { border-left: 4px solid #34d399; box-shadow: 0 4px 20px rgba(52, 211, 153, 0.2); }
+        .toast-error { border-left: 4px solid #f87171; box-shadow: 0 4px 20px rgba(248, 113, 113, 0.2); }
+
+        .app-container { width: 100%; }
+
+        /* NAVBAR WITH CYBERPUNK LINE */
+        .navbar {
+            display: flex; justify-content: center; align-items: center;
+            padding: 24px 40px; background-color: rgba(2, 4, 10, 0.4);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(168, 85, 247, 0.1); position: sticky; top: 0; z-index: 10;
+        }
+        
+        .brand-title { 
+            font-weight: 800; font-size: 18px; letter-spacing: 4px; text-transform: uppercase;
+            color: #fff; position: relative; cursor: pointer;
+        }
+        .brand-title:hover {
+            animation: glitchText 0.3s linear infinite;
+            text-shadow: 2px -2px #00ffff, -2px 2px #ff00ff;
+        }
+        @keyframes glitchText {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+
+        /* HERO SECTION - FORCE VERTICAL STACK SYSTEM */
+        .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+        .hero-section { 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center; 
+            margin: 70px 0 50px 0; 
+        }
+        
+        .badge-info {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(168, 85, 247, 0.06); border: 1px solid rgba(168, 85, 247, 0.3);
+            color: var(--purple-glow); padding: 8px 18px; font-size: 12px; font-weight: 600;
+            border-radius: 100px; margin-bottom: 24px; box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+            animation: badgePulse 2s infinite ease-in-out;
+        }
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 15px rgba(192, 132, 252, 0.1); border-color: rgba(168, 85, 247, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(192, 132, 252, 0.4); border-color: rgba(168, 85, 247, 0.7); }
+        }
+
+        /* NEW LUXURY KINETIC TYPOGRAPHY CSS STYLE */
+        .main-title { 
+            font-size: 64px; font-weight: 850; letter-spacing: -1.5px; margin-bottom: 30px; 
+            cursor: default; display: inline-block; user-select: none;
+            touch-action: none; /* Mencegah layar HP bergulir saat menyapu/mengusap tulisan */
+        }
+        .main-title span {
+            display: inline-block;
+            background: linear-gradient(to bottom, #ffffff 40%, #9ca3af 100%); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s;
+            -webkit-user-select: none; user-select: none;
+        }
+        
+        .btn-tambah-momen {
+            background: linear-gradient(90deg, #ffffff, #f3f4f6, #e5e7eb, #ffffff);
+            background-size: 300% auto; color: #030712; border: none; padding: 18px 40px;
+            font-size: 14px; font-weight: 800; border-radius: 16px; cursor: pointer;
+            box-shadow: 0 4px 30px rgba(255, 255, 255, 0.08), 0 0 20px rgba(168, 85, 247, 0.2); 
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); animation: shimmerEffect 4s linear infinite;
+        }
+        .btn-tambah-momen:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 12px 40px rgba(255, 255, 255, 0.2), 0 0 35px rgba(168, 85, 247, 0.4); }
+        @keyframes shimmerEffect { to { background-position: 300% center; } }
+
+        /* CONTROL BAR CONTROL PANEL */
+        .control-bar {
+            background: rgba(10, 15, 30, 0.3); border: 1px solid var(--card-border);
+            padding: 16px; border-radius: 24px; margin-bottom: 50px; backdrop-filter: blur(12px);
+            display: flex; flex-direction: column; gap: 14px; align-items: center; justify-content: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        }
+        @media (min-width: 768px) { .control-bar { flex-direction: row; justify-content: center; gap: 16px; } }
+        
+        .search-box {
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px; padding: 14px 20px; color: white; font-family: inherit; font-size: 14px;
+            width: 100%; max-width: 300px; transition: all 0.3s ease;
+        }
+        .search-box:focus { outline: none; border-color: rgba(168, 85, 247, 0.6); background: rgba(255, 255, 255, 0.05); box-shadow: 0 0 20px rgba(168, 85, 247, 0.2); }
+        
+        .filter-group { display: flex; align-items: center; gap: 12px; width: 100%; max-width: max-content; }
+        .btn-sort { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 12px 18px; color: white; cursor: pointer; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: all 0.3s ease; white-space: nowrap; }
+        .btn-sort:hover { background: rgba(255, 255, 255, 0.06); border-color: rgba(168, 85, 247, 0.5); }
+
+        .filter-tags { display: flex; gap: 8px; overflow-x: auto; white-space: nowrap; padding-bottom: 4px; }
+        .filter-tags::-webkit-scrollbar { height: 0px; }
+        
+        .tag-btn { background: transparent; border: 1px solid rgba(255, 255, 255, 0.06); color: var(--text-muted); padding: 12px 20px; font-size: 13px; font-weight: 600; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; }
+        .tag-btn:hover, .tag-btn.active { background: rgba(168, 85, 247, 0.1); color: var(--purple-glow); border-color: rgba(168, 85, 247, 0.5); box-shadow: 0 0 15px rgba(168, 85, 247, 0.2); }
+
+        /* GRID MEMORI */
+        .grid-memori { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 36px; }
+        
+        /* 3D PARALLAX CARD BASE STYLING */
+        .card-container-3d { perspective: 1000px; }
+        
+        .card-memori { 
+            background: var(--bg-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-radius: 28px; overflow: hidden; border: 1px solid var(--card-border); 
+            display: flex; flex-direction: column; position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease, border-color 0.4s, box-shadow 0.4s;
+            touch-action: none; /* Mengunci scroll default browser saat jari melakukan swipe geser pada kartu */
+        }
+        
+        /* GLARE OVERLAY FOR 3D TILT EFFECT */
+        .card-glare {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 4; border-radius: 28px;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0), transparent 60%);
+        }
+
+        .card-memori.pinned { border-color: rgba(251, 191, 36, 0.6) !important; box-shadow: 0 0 25px rgba(251, 191, 36, 0.15) !important; }
+        
+        .image-wrapper { width: 100%; height: 260px; overflow: hidden; position: relative; background: #05070f; cursor: zoom-in; transform: translateZ(20px); }
+        .card-memori img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        
+        /* HOLOGRAM SCANLINES TRIGGER ON IMAGE HOVER */
+        .image-wrapper::after {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(168, 85, 247, 0) 50%, rgba(0, 212, 255, 0.15) 50%);
+            background-size: 100% 4px; opacity: 0; pointer-events: none; z-index: 2;
+            transition: opacity 0.3s ease;
+        }
+        .card-memori :hover .image-wrapper::after {
+            opacity: 1; animation: scanlineAnim 1.5s linear infinite;
+        }
+        @keyframes scanlineAnim {
+            from { background-position: 0 0; }
+            to { background-position: 0 100px; }
+        }
+
+        .category-badge { position: absolute; top: 18px; left: 18px; background: rgba(2, 4, 10, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 5px 14px; font-size: 11px; font-weight: 700; border-radius: 10px; color: #fff; z-index: 3; transform: translateZ(30px); }
+        .btn-pin-card { position: absolute; top: 16px; right: 16px; background: rgba(2, 4, 10, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); width: 34px; height: 34px; display: flex; justify-content: center; align-items: center; border-radius: 50%; cursor: pointer; font-size: 14px; color: var(--text-muted); transition: all 0.3s ease; z-index: 3; transform: translateZ(30px); }
+        .btn-pin-card:hover, .card-memori.pinned .btn-pin-card { color: var(--accent-gold); border-color: rgba(251, 191, 36, 0.5); transform: scale(1.1) translateZ(30px); }
+
+        .card-content { padding: 28px; display: flex; flex-direction: column; flex-grow: 1; transform: translateZ(25px); }
+        .card-date { font-size: 11px; font-weight: 700; color: var(--purple-glow); letter-spacing: 0.6px; margin-bottom: 12px; text-transform: uppercase; }
+        
+        .card-memori.kat-liburan .card-date { color: var(--glow-liburan); }
+        .card-memori.kat-kuliah .card-date { color: var(--glow-kuliah); }
+        .card-memori.kat-olahraga .card-date { color: var(--glow-olahraga); }
+
+        .card-content h3 { margin: 0 0 10px 0; font-size: 21px; font-weight: 700; color: #ffffff; letter-spacing: -0.4px; }
+        .card-content p { margin: 0 0 26px 0; color: var(--text-muted); font-size: 14px; line-height: 1.6; flex-grow: 1; }
+        
+        .card-actions { display: flex; gap: 12px; width: 100%; }
+        .btn-action-download { background: rgba(255, 255, 255, 0.03); color: var(--text-main); border: 1px solid rgba(255, 255, 255, 0.06); padding: 12px; border-radius: 14px; cursor: pointer; font-weight: 600; font-size: 13px; flex: 1; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s ease; }
+        .btn-action-download:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(255,255,255,0.2); }
+        .btn-action-del { background: transparent; color: #f87171; border: 1px solid rgba(248, 113, 113, 0.15); padding: 12px; border-radius: 14px; cursor: pointer; font-weight: 600; font-size: 13px; flex: 1; transition: all 0.2s ease; }
+        .btn-action-del:hover { background: rgba(248, 113, 113, 0.08); border-color: #f87171; }
+
+        /* HUD SIDEBAR DASHBOARD STATISTICS */
+        #hud-sidebar {
+            position: fixed; top: 0; left: -310px; width: 300px; height: 100%;
+            background: rgba(5, 10, 25, 0.75); backdrop-filter: blur(30px);
+            border-right: 1px solid var(--card-border); z-index: 9999; padding: 40px 24px;
+            box-shadow: 20px 0 50px rgba(0,0,0,0.6); transition: left 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        #hud-sidebar.open { left: 0; }
+        
+        #btn-hud-toggle {
+            position: fixed; top: 22px; left: 24px; z-index: 10000;
+            background: rgba(10, 15, 30, 0.6); border: 1px solid var(--card-border);
+            color: #fff; width: 44px; height: 44px; border-radius: 12px; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; font-size: 18px;
+            backdrop-filter: blur(10px); transition: all 0.3s ease;
+        }
+        #btn-hud-toggle:hover { border-color: var(--purple-glow); box-shadow: 0 0 15px var(--purple-glow); }
+        
+        .hud-title { font-size: 14px; font-weight: 800; color: var(--purple-glow); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px; border-bottom: 1px dashed rgba(168,85,247,0.2); padding-bottom: 10px;}
+        .hud-stat-box { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); padding: 16px; border-radius: 16px; margin-bottom: 16px; }
+        .hud-stat-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+        .hud-stat-val { font-size: 24px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px;}
+        
+        /* HUD PROGRESS BAR GRAPHICS */
+        .hud-progress-container { width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 100px; margin-top: 8px; overflow: hidden; }
+        .hud-progress-bar { height: 100%; width: 0%; transition: width 1s ease-out; }
+
+        /* MODAL WINDOWS */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(2,4,10, 0.85); backdrop-filter: blur(20px); display: flex; justify-content: center; align-items: center; z-index: 100; animation: fadeInModal 0.3s ease; }
+        @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
+        
+        .modal-content { background: #0a0f1d; border: 1px solid rgba(168, 85, 247, 0.2); padding: 36px; border-radius: 28px; width: 90%; max-width: 440px; box-shadow: 0 35px 70px rgba(0,0,0,0.7); }
+        .modal-content h3 { margin-top: 0; margin-bottom: 24px; font-size: 22px; font-weight: 800; text-align: center; letter-spacing: -0.5px; }
+        
+        .modal-content input, .modal-content textarea, .modal-content select { width: 100%; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); color: white; padding: 14px; border-radius: 14px; margin-bottom: 18px; font-size: 14px; font-family: inherit; box-sizing: border-box; transition: all 0.3s ease; }
+        .modal-content select option { background: #0a0f1d; color: white; }
+        .modal-content input:focus, .modal-content textarea:focus, .modal-content select:focus { outline: none; border-color: var(--purple-glow); background: rgba(255, 255, 255, 0.05); }
+        
+        .input-label-mini { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; padding-left: 4px; letter-spacing: 0.5px; }
+
+        .file-label { display: block; background: rgba(255, 255, 255, 0.01); border: 1px dashed rgba(255, 255, 255, 0.12); padding: 18px; text-align: center; border-radius: 14px; cursor: pointer; font-weight: 600; font-size: 13px; color: var(--text-main); margin-bottom: 18px; transition: 0.3s; }
+        .file-label:hover { border-color: var(--purple-glow); background: rgba(168, 85, 247, 0.02); }
+        input[type="file"] { display: none; }
+        #preview-container img { width: 100%; max-height: 160px; object-fit: cover; border-radius: 14px; margin-bottom: 18px; border: 1px solid rgba(255,255,255,0.05); }
+        
+        .modal-buttons { display: flex; gap: 14px; }
+        .btn-save { background: #ffffff; color: #030712; border: none; padding: 15px; border-radius: 14px; flex: 2; font-weight: 700; font-size: 14px; cursor: pointer; transition: 0.2s; }
+        .btn-save:hover { background: #f3f4f6; transform: translateY(-1px); }
+        .btn-cancel { background: transparent; color: var(--text-muted); border: 1px solid rgba(255, 255, 255, 0.08); padding: 15px; border-radius: 14px; flex: 1; font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.2s; }
+        .btn-cancel:hover { background: rgba(255, 255, 255, 0.03); color: #fff; }
+        
+        .confirm-dialog { background: #0a0f1d; border: 1px solid rgba(248,113,113,0.3); padding: 32px; border-radius: 24px; text-align: center; max-width: 380px; width: 88%; box-shadow: 0 25px 50px rgba(0,0,0,0.6); }
+        .confirm-dialog p { font-size: 15px; font-weight: 600; margin-bottom: 26px; color: #f3f4f6; line-height: 1.5; }
+        .btn-confirm-yes { background: #f87171; color: white; border: none; padding: 12px 26px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-confirm-yes:hover { background: #ef4444; }
+        .btn-confirm-no { background: transparent; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.08); padding: 12px 26px; border-radius: 12px; font-weight: 600; cursor: pointer; margin-right: 12px; transition: 0.2s; }
+        .btn-confirm-no:hover { background: rgba(255,255,255,0.03); color: #fff; }
+
+        .hidden { display: none !important; }
+
+        /* LIGHTBOX CINEMA SYSTEM */
+        .premium-lightbox { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2,4,10,0.94); backdrop-filter: blur(25px); display: flex; justify-content: center; align-items: center; z-index: 999999; cursor: zoom-out; opacity: 0; transition: opacity 0.3s ease; }
+        .premium-lightbox.visible { opacity: 1; }
+        .premium-lightbox img { max-width: 85%; max-height: 85%; object-fit: contain; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 30px 70px rgba(0,0,0,0.9); transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.15); }
+        .premium-lightbox.visible img { transform: scale(1); }
+
+        /* ADVANCED SMARTPHONE RESPONSIVE PRESETS */
+        @media (max-width: 768px) {
+            #custom-cursor { display: none !important; } 
+            .main-title { font-size: 38px; margin-bottom: 20px; } 
+            .hero-section { margin: 40px 0 30px 0; }
+            .navbar { padding: 18px 20px; }
+            .control-bar { border-radius: 18px; padding: 12px; margin-bottom: 30px; }
+            .grid-memori { gap: 24px; grid-template-columns: 1fr; } 
+            .card-memori { border-radius: 22px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LAYER LIQUID MESH BACKGROUND -->
+    <div id="mesh-bg"></div>
+
+    <canvas id="bg-canvas"></canvas>
+    <div id="custom-cursor"></div>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- SIDEBAR PANEL HUD STATISTICS INTERFACE -->
+    <button id="btn-hud-toggle" title="Buka Dashboard HUD Statistics">📊</button>
+    <div id="hud-sidebar">
+        <div class="hud-title">📊 Core System HUD</div>
+        
+        <div class="hud-stat-box">
+            <div class="hud-stat-label">Total Momen Terkunci</div>
+            <div class="hud-stat-val" id="hud-total-momen">0</div>
+        </div>
+        <div class="hud-stat-box">
+            <div class="hud-stat-label">🗺️ Kategori Liburan</div>
+            <div class="hud-stat-val" id="hud-val-liburan" style="color: var(--glow-liburan)">0</div>
+            <div class="hud-progress-container"><div id="bar-liburan" class="hud-progress-bar" style="background: var(--glow-liburan)"></div></div>
+        </div>
+        <div class="hud-stat-box">
+            <div class="hud-stat-label">🎓 Kategori Kuliah</div>
+            <div class="hud-stat-val" id="hud-val-kuliah" style="color: var(--glow-kuliah)">0</div>
+            <div class="hud-progress-container"><div id="bar-kuliah" class="hud-progress-bar" style="background: var(--glow-kuliah)"></div></div>
+        </div>
+        <div class="hud-stat-box">
+            <div class="hud-stat-label">⚽ Kategori Olahraga</div>
+            <div class="hud-stat-val" id="hud-val-olahraga" style="color: var(--glow-olahraga)">0</div>
+            <div class="hud-progress-container"><div id="bar-olahraga" class="hud-progress-bar" style="background: var(--glow-olahraga)"></div></div>
+        </div>
+    </div>
+
+    <!-- WINDOW DIALOG KONFIRMASI -->
+    <div id="confirmOverlay" class="modal hidden">
+        <div class="confirm-dialog">
+            <p id="confirmMessage">Apakah kamu yakin ingin menghapus kenangan indah ini?</p>
+            <button class="btn-confirm-no" id="confirmNoBtn">Batal</button>
+            <button class="btn-confirm-yes" id="confirmYesBtn">Hapus</button>
+        </div>
+    </div>
+
+    <!-- MAIN INTERFACE -->
+    <div id="appContainer" class="app-container">
+        <header class="navbar">
+            <div class="brand-title" id="web-brand">🌌 Kapsul Waktu</div>
+        </header>
+
+        <div class="container">
+            <!-- HERO SECTION -->
+            <div class="hero-section">
+                <div id="counter-momen" class="badge-info">🔮 Menghubungkan Ruang Kenangan...</div>
+                <h1 class="main-title" id="kinetic-title">Kapsul Waktu</h1>
+                <button id="btn-buka-modal" class="btn-tambah-momen">✨ Kunci Momen Baru</button>
+            </div>
+
+            <!-- UNIFIED CENTERED CONTROL BAR -->
+            <div class="control-bar">
+                <input type="text" id="search-box" class="search-box" placeholder="🔍 Cari judul atau cerita memori...">
+                
+                <div class="filter-group">
+                    <button class="btn-sort" onclick="toggleSortOrder()">
+                        <span id="sort-icon">⏳</span> <span id="sort-text">Terbaru</span>
+                    </button>
+                    <div class="filter-tags">
+                        <button class="tag-btn active" onclick="filterKategori('Semua', this)">✨ Semua</button>
+                        <button class="tag-btn" onclick="filterKategori('Disematkan', this)">📌 Disematkan</button>
+                        <button class="tag-btn" onclick="filterKategori('🗺️ Liburan', this)">🗺️ Liburan</button>
+                        <button class="tag-btn" onclick="filterKategori('🎓 Kuliah', this)">🎓 Kuliah</button>
+                        <button class="tag-btn" onclick="filterKategori('⚽ Olahraga', this)">⚽ Olahraga</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="daftar-memori" class="grid-memori"></div>
+        </div>
+    </div>
+
+    <!-- FORM ENTRY MODAL -->
+    <div id="modal-input" class="modal hidden">
+        <div class="modal-content">
+            <h3>🔒 Kunci Momen Baru</h3>
+            
+            <input type="text" id="judul" placeholder="Judul Momen Spesial...">
+            
+            <select id="kategori">
+                <option value="🗺️ Liburan">🗺️ Kategori: Liburan</option>
+                <option value="🎓 Kuliah">🎓 Kategori: Kuliah</option>
+                <option value="⚽ Olahraga">⚽ Kategori: Olahraga</option>
+            </select>
+
+            <span class="input-label-mini">📅 Kapan Momen Ini Diambil/Terjadi?</span>
+            <input type="date" id="tanggal-memori" style="color: white;">
+
+            <textarea id="cerita" rows="3" placeholder="Tulis cerita atau deskripsi kenangan ini..."></textarea>
+            
+            <label class="file-label">
+                📸 Pilih Foto Kenangan
+                <input type="file" id="foto" accept="image/*">
+            </label>
+            <div id="preview-container" class="hidden">
+                <img id="preview-foto" src="" alt="Pratinjau">
+            </div>
+            <div class="modal-buttons">
+                <button id="btn-simpan" class="btn-save">Simpan Kenangan</button>
+                <button id="btn-batal" class="btn-cancel">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let sortOrderNewest = true; 
+        let kategoriAktif = "Semua";
+
+        function isLocalMode() {
+            return window.location.protocol === 'file:' || 
+                   window.location.hostname === 'localhost' || 
+                   window.location.hostname === '127.0.0.1';
+        }
+
+        // PROCEDURAL WEB AUDIO ENGINE SYNTH CLICK
+        let audioCtx = null;
+        function playSciFiSound(freq = 600, type = 'sine', duration = 0.08) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                
+                let osc = audioCtx.createOscillator();
+                let gainNode = audioCtx.createGain();
+                
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                if(type === 'sine') osc.frequency.exponentialRampToValueAtTime(freq / 3, audioCtx.currentTime + duration);
+                
+                gainNode.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        // KINETIC TYPOGRAPHY WAVE ENGINE EXPERT (LAPTOP HOVER + HP ADVANCED FLUID SWIPE)
+        const titleEl = document.getElementById('kinetic-title');
+        const originalText = titleEl.innerText;
+        titleEl.innerHTML = originalText.split("").map((char, i) => {
+            return `<span style="transition-delay: ${i * 0.01}s">${char === " " ? "&nbsp;" : char}</span>`;
+        }).join("");
+
+        const spans = titleEl.querySelectorAll('span');
+
+        spans.forEach((span, i) => {
+            // DESKTOP: Aktif saat kursor bergerak masuk area huruf
+            span.addEventListener('mouseenter', () => {
+                span.style.transform = 'translateY(-18px) scale(1.3) rotate(6deg)';
+                span.style.filter = 'drop-shadow(0 0 15px var(--purple-glow)) drop-shadow(0 0 30px #22d3ee)';
+                playSciFiSound(500 + (i * 45), 'sine', 0.05);
+            });
+            span.addEventListener('mouseleave', () => {
+                span.style.transform = 'translateY(0) scale(1) rotate(0deg)';
+                span.style.filter = 'none';
+            });
+        });
+
+        // REVISI TOTAL: MODUL MATRIKS DETEKSI GESER/USAP JARI PADA HP (SWIPE TO ACTIVATE CODES)
+        function activateLetterMobile(spanEl) {
+            if (!spanEl || spanEl.classList.contains('letter-active')) return;
+            
+            spanEl.classList.add('letter-active');
+            spanEl.style.transform = 'translateY(-18px) scale(1.3) rotate(6deg)';
+            spanEl.style.filter = 'drop-shadow(0 0 15px var(--purple-glow)) drop-shadow(0 0 30px #22d3ee)';
+            
+            const index = Array.from(spans).indexOf(spanEl);
+            if (index !== -1) {
+                playSciFiSound(500 + (index * 45), 'sine', 0.05);
+            }
+            
+            // Kembalikan posisi huruf ke semula setelah durasi usapan berlalu
+            setTimeout(() => {
+                spanEl.style.transform = 'translateY(0) scale(1) rotate(0deg)';
+                spanEl.style.filter = 'none';
+                spanEl.classList.remove('letter-active');
+            }, 400);
+        }
+
+        function handleTouchTrack(e) {
+            const touch = e.touches[0];
+            // Mengambil elemen HTML murni yang tepat berada di bawah titik koordinat ujung jari
+            const elementPoint = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (elementPoint && elementPoint.parentNode === titleEl) {
+                activateLetterMobile(elementPoint);
+            }
+        }
+
+        // Jalankan pelacakan radar saat jari pertama kali menyentuh teks maupun saat disapu/digeser
+        titleEl.addEventListener('touchstart', handleTouchTrack, { passive: true });
+        titleEl.addEventListener('touchmove', function(e) {
+            e.preventDefault(); // Mengunci pergerakan halaman agar usapan fokus penuh pada judul
+            handleTouchTrack(e);
+        }, { passive: false });
+
+
+        // PLUG INTERACTION SOUNDS TO EXISITING BUTTONS
+        document.querySelectorAll('button, input, select, textarea').forEach(el => {
+            el.addEventListener('click', () => playSciFiSound(700, 'sine', 0.06));
+        });
+
+        // CUSTOM CURSOR SMOOTH TRACKER & CURSOR PARTICLE TRAIL
+        const mouse = { x: undefined, y: undefined, radius: 130 };
+        const cursorDot = document.getElementById('custom-cursor');
+        let trailParticles = [];
+
+        class CursorTrail {
+            constructor(x, y) {
+                this.x = x; this.y = y;
+                this.size = Math.random() * 3.5 + 1.5;
+                this.speedX = (Math.random() - 0.5) * 0.8;
+                this.speedY = (Math.random() - 0.5) * 0.8;
+                this.alpha = 1;
+            }
+            update() { this.x += this.speedX; this.y += this.speedY; this.alpha -= 0.025; }
+            draw(ctx) { ctx.fillStyle = `rgba(192, 132, 252, ${this.alpha})`; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
+        }
+
+        window.addEventListener('mousemove', function(event) {
+            mouse.x = event.clientX; mouse.y = event.clientY;
+            cursorDot.style.left = mouse.x + 'px';
+            cursorDot.style.top = mouse.y + 'px';
+            if(Math.random() < 0.4) { trailParticles.push(new CursorTrail(mouse.x, mouse.y)); }
+        });
+        window.addEventListener('mouseleave', function() { mouse.x = undefined; mouse.y = undefined; });
+        window.addEventListener('mousedown', () => { cursorDot.style.width = '16px'; cursorDot.style.height = '16px'; });
+        window.addEventListener('mouseup', () => { cursorDot.style.width = '8px'; cursorDot.style.height = '8px'; });
+
+        // TOAST SYSTEM
+        function launchToast(msg, isSuccess = true) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `custom-toast ${isSuccess ? 'toast-success' : 'toast-error'}`;
+            toast.innerHTML = isSuccess ? `🔹 ${msg}` : `⚠️ ${msg}`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 50);
+            setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 3000);
+        }
+
+        // CONFIRM SYSTEM
+        function askConfirmation(msg, onConfirm) {
+            playSciFiSound(300, 'sawtooth', 0.15);
+            const overlay = document.getElementById('confirmOverlay');
+            document.getElementById('confirmMessage').innerText = msg;
+            overlay.classList.remove('hidden');
+            const yesBtn = document.getElementById('confirmYesBtn');
+            const noBtn = document.getElementById('confirmNoBtn');
+            const cleanUp = () => { overlay.classList.add('hidden'); };
+            yesBtn.onclick = () => { playSciFiSound(800, 'sine', 0.1); onConfirm(); cleanUp(); };
+            noBtn.onclick = () => { playSciFiSound(400, 'sine', 0.05); cleanUp(); };
+        }
+
+        // BACKGROUND CANVAS STARS & METEORS
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let partikelArray = [];
+        let meteorArray = [];
+
+        function aturUkuranCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        aturUkuranCanvas();
+        window.addEventListener('resize', aturUkuranCanvas);
+
+        class Partikel {
+            constructor() {
+                this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
+                this.ukuran = Math.random() * 1.6 + 0.4; 
+                this.kecepatanY = Math.random() * 0.12 + 0.04; this.kecepatanX = Math.random() * 0.04 - 0.02; 
+                this.alpha = Math.random() * 0.5 + 0.1;
+            }
+            update() {
+                this.y += this.kecepatanY; this.x += this.kecepatanX;
+                if (this.y > canvas.height) { this.y = 0; this.x = Math.random() * canvas.width; }
+                if (this.x > canvas.width || this.x < 0) { this.x = Math.random() * canvas.width; }
+
+                if (mouse.x !== undefined && mouse.y !== undefined) {
+                    let dx = this.x - mouse.x; let dy = this.y - mouse.y; let jarak = Math.hypot(dx, dy);
+                    if (jarak < mouse.radius) {
+                        let force = (mouse.radius - jarak) / mouse.radius;
+                        this.x += (dx / jarak) * force * 4; this.y += (dy / jarak) * force * 4;
+                    }
+                }
+            }
+            draw() { ctx.fillStyle = `rgba(192, 132, 252, ${this.alpha})`; ctx.beginPath(); ctx.arc(this.x, this.y, this.ukuran, 0, Math.PI * 2); ctx.fill(); }
+        }
+
+        class Meteor {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width; this.y = Math.random() * (canvas.height / 3) - 50;
+                this.panjang = Math.random() * 80 + 40;
+                this.kecepatanX = Math.random() * 4 + 4; this.kecepatanY = Math.random() * 4 + 4;
+                this.alpha = 1;
+            }
+            update() {
+                this.x += this.kecepatanX; this.y += this.kecepatanY; this.alpha -= 0.015;
+                if (this.alpha <= 0 || this.x > canvas.width || this.y > canvas.height) { this.reset(); }
+            }
+            draw() {
+                ctx.save();
+                let grad = ctx.createLinearGradient(this.x, this.y, this.x - this.panjang, this.y - this.panjang);
+                grad.addColorStop(0, `rgba(255, 255, 255, ${this.alpha})`);
+                grad.addColorStop(0.5, `rgba(192, 132, 252, ${this.alpha * 0.5})`);
+                grad.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.strokeStyle = grad; ctx.lineWidth = 1.5; ctx.beginPath();
+                ctx.moveTo(this.x, this.y); ctx.lineTo(this.x - this.panjang, this.y - this.panjang);
+                ctx.stroke(); ctx.restore();
+            }
+        }
+
+        function inisialisasiPartikel() {
+            partikelArray = [];
+            const jumlahPartikel = Math.min(60, window.innerWidth / 12);
+            for (let i = 0; i < jumlahPartikel; i++) partikelArray.push(new Partikel());
+            meteorArray = [];
+            for (let i = 0; i < 2; i++) meteorArray.push(new Meteor());
+        }
+        inisialisasiPartikel();
+
+        function animasiBackground() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < partikelArray.length; i++) { partikelArray[i].update(); partikelArray[i].draw(); }
+            if (Math.random() < 0.003) { meteorArray.forEach(m => m.update()); meteorArray.forEach(m => m.draw()); } 
+            else { meteorArray.forEach(m => { if(m.alpha < 1) m.update(); m.draw(); }); }
+            for (let i = 0; i < trailParticles.length; i++) {
+                trailParticles[i].update(); trailParticles[i].draw(ctx);
+                if(trailParticles[i].alpha <= 0) { trailParticles.splice(i, 1); i--; }
+            }
+            requestAnimationFrame(animasiBackground);
+        }
+        animasiBackground();
+
+        // HUD SIDEBAR PANEL TOGGLE FUNCTION
+        const hudSidebar = document.getElementById('hud-sidebar');
+        const btnHudToggle = document.getElementById('btn-hud-toggle');
+        btnHudToggle.addEventListener('click', () => {
+            hudSidebar.classList.toggle('open');
+            playSciFiSound(hudSidebar.classList.contains('open') ? 500 : 400, 'sine', 0.12);
+        });
+
+        // CORE CONTROL SELECTORS
+        const modalInput = document.getElementById('modal-input');
+        const btnBukaModal = document.getElementById('btn-buka-modal');
+        const btnBatal = document.getElementById('btn-batal');
+        const btnSimpan = document.getElementById('btn-simpan');
+
+        const inputJudul = document.getElementById('judul');
+        const inputKategori = document.getElementById('kategori');
+        const inputTanggalMemori = document.getElementById('tanggal-memori');
+        const inputCerita = document.getElementById('cerita');
+        const inputFoto = document.getElementById('foto');
+        const previewContainer = document.getElementById('preview-container');
+        const previewFoto = document.getElementById('preview-foto');
+        const daftarMemoriDiv = document.getElementById('daftar-memori');
+        const counterMomen = document.getElementById('counter-momen');
+        const searchBox = document.getElementById('search-box');
+
+        let fotoBase64 = "";
+
+        btnBukaModal.addEventListener('click', () => {
+            modalInput.classList.remove('hidden');
+            const hariIni = new Date().toISOString().split('T')[0];
+            inputTanggalMemori.value = hariIni;
+            playSciFiSound(600, 'sine', 0.1);
+        });
+        
+        btnBatal.addEventListener('click', tutupModal);
+
+        function tutupModal() {
+            modalInput.classList.add('hidden');
+            inputJudul.value = ""; inputCerita.value = ""; inputFoto.value = ""; inputTanggalMemori.value = "";
+            fotoBase64 = ""; previewContainer.classList.add('hidden');
+            playSciFiSound(400, 'sine', 0.08);
+        }
+
+        // COMPRESSOR ENGINE
+        inputFoto.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                launchToast("Memproses & mengompresi foto...");
+                if(file.lastModified) {
+                    const tanggalFileAsli = new Date(file.lastModified).toISOString().split('T')[0];
+                    inputTanggalMemori.value = tanggalFileAsli;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvasComp = document.createElement('canvas');
+                        const ctxComp = canvasComp.getContext('2d');
+                        let width = img.width; let height = img.height;
+                        const MAX_RESOLUTION = 900;
+                        if (width > height) { if (width > MAX_RESOLUTION) { height *= MAX_RESOLUTION / width; width = MAX_RESOLUTION; } } 
+                        else { if (height > MAX_RESOLUTION) { width *= MAX_RESOLUTION / height; height = MAX_RESOLUTION; } }
+                        
+                        canvasComp.width = width; canvasComp.height = height;
+                        ctxComp.drawImage(img, 0, 0, width, height);
+                        fotoBase64 = canvasComp.toDataURL('image/jpeg', 0.7);
+                        previewFoto.src = fotoBase64; previewContainer.classList.remove('hidden');
+                        launchToast("Foto berhasil dioptimalkan!");
+                    };
+                    img.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        btnSimpan.addEventListener('click', async function() {
+            const judul = inputJudul.value.trim() || "Momen Spesial";
+            const kategori = inputKategori.value;
+            const cerita = inputCerita.value.trim() || "Tidak ada catatan.";
+            if (!fotoBase64) { launchToast("Silakan tentukan foto kenangan!", false); return; }
+
+            const opsiTanggal = { day: 'numeric', month: 'long', year: 'numeric' };
+            let tanggalFinal = new Date().toLocaleDateString('id-ID', opsiTanggal);
+            if(inputTanggalMemori.value) { tanggalFinal = new Date(inputTanggalMemori.value).toLocaleDateString('id-ID', opsiTanggal); }
+
+            const dataPayload = { id: +new Date(), judul: judul, kategori: kategori, cerita: cerita, tanggal: tanggalFinal, foto: fotoBase64, isPinned: false };
+
+            if (isLocalMode()) {
+                try {
+                    let kumpulanMemori = JSON.parse(localStorage.getItem('kapsulWaktuGitHub')) || [];
+                    kumpulanMemori.push(dataPayload);
+                    localStorage.setItem('kapsulWaktuGitHub', JSON.stringify(kumpulanMemori));
+                    playSciFiSound(900, 'sine', 0.15); launchToast("Kenangan disimpan di memori lokal laptop!");
+                    tutupModal(); tampilkanMemori();
+                } catch (domErr) { launchToast("Memori penuh! Segera upload ke hosting.", false); }
+            } else {
+                try {
+                    launchToast("Sedang mentransfer kenangan ke server hosting...");
+                    const response = await fetch('api.php?action=save', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dataPayload)
+                    });
+                    const hasil = await response.json();
+                    if(hasil.success) { playSciFiSound(900, 'sine', 0.15); launchToast(hasil.message); tutupModal(); tampilkanMemori(); } 
+                    else { launchToast(hasil.message, false); }
+                } catch (err) { launchToast("Gagal terhubung ke hosting!", false); }
+            }
+        });
+
+        function filterKategori(namaKategori, elemen) {
+            kategoriAktif = namaKategori;
+            playSciFiSound(650, 'sine', 0.05);
+            document.querySelectorAll('.tag-btn').forEach(btn => btn.classList.remove('active'));
+            elemen.classList.add('active');
+            tampilkanMemori();
+        }
+
+        function toggleSortOrder() {
+            sortOrderNewest = !sortOrderNewest;
+            playSciFiSound(650, 'sine', 0.05);
+            document.getElementById('sort-text').innerText = sortOrderNewest ? "Terbaru" : "Terlama";
+            document.getElementById('sort-icon').innerText = sortOrderNewest ? "⏳" : "⌛";
+            tampilkanMemori();
+        }
+
+        searchBox.addEventListener('input', tampilkanMemori);
+
+        window.togglePinMomen = async function(id) {
+            playSciFiSound(800, 'sine', 0.08);
+            if (isLocalMode()) {
+                let kumpulanMemori = JSON.parse(localStorage.getItem('kapsulWaktuGitHub')) || [];
+                kumpulanMemori = kumpulanMemori.map(m => {
+                    if(m.id === id) { m.isPinned = !m.isPinned; launchToast(m.isPinned ? "Momen disematkan!" : "Momen dilepas."); }
+                    return m;
+                });
+                localStorage.setItem('kapsulWaktuGitHub', JSON.stringify(kumpulanMemori));
+                tampilkanMemori();
+            } else {
+                try {
+                    await fetch('api.php?action=pin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: id }) });
+                    tampilkanMemori();
+                } catch (err) { launchToast("Gagal memperbarui pin hosting!", false); }
+            }
+        }
+
+        async function tampilkanMemori() {
+            daftarMemoriDiv.innerHTML = ""; let kumpulanMemori = [];
+            if (isLocalMode()) { kumpulanMemori = JSON.parse(localStorage.getItem('kapsulWaktuGitHub')) || []; } 
+            else {
+                try { const response = await fetch('api.php'); kumpulanMemori = await response.json(); } 
+                catch (err) { counterMomen.innerHTML = "⚠️ Gagal Sinkronisasi Hosting"; return; }
+            }
+
+            const total = kumpulanMemori.length;
+            const countLiburan = kumpulanMemori.filter(m => m.kategori.includes("Liburan")).length;
+            const countKuliah = kumpulanMemori.filter(m => m.kategori.includes("Kuliah")).length;
+            const countOlahraga = kumpulanMemori.filter(m => m.kategori.includes("Olahraga")).length;
+
+            if (kumpulanMemori.length === 0) {
+                counterMomen.innerHTML = isLocalMode() ? "✨ Kapsul Lokal Kosong" : "✨ Server Kapsul Kosong";
+            } else {
+                counterMomen.innerHTML = isLocalMode() ? `🔮 ${kumpulanMemori.length} Momen Tersimpan Lokal` : `🔮 ${kumpulanMemori.length} Momen Terkunci Abadi`;
+            }
+
+            document.getElementById('hud-total-momen').innerText = total;
+            document.getElementById('hud-val-liburan').innerText = countLiburan;
+            document.getElementById('hud-val-kuliah').innerText = countKuliah;
+            document.getElementById('hud-val-olahraga').innerText = countOlahraga;
+
+            document.getElementById('bar-liburan').style.width = total > 0 ? `${(countLiburan / total) * 100}%` : '0%';
+            document.getElementById('bar-kuliah').style.width = total > 0 ? `${(countKuliah / total) * 100}%` : '0%';
+            document.getElementById('bar-olahraga').style.width = total > 0 ? `${(countOlahraga / total) * 100}%` : '0%';
+
+            const teksCari = searchBox.value.toLowerCase().trim();
+            let dataHasilFilter = kumpulanMemori.filter(m => {
+                let cocokKategori = false;
+                if (kategoriAktif === "Semua") cocokKategori = true;
+                else if (kategoriAktif === "Disematkan") cocokKategori = m.isPinned;
+                else cocokKategori = (m.kategori === kategoriAktif);
+                
+                const cocokTeks = (m.judul.toLowerCase().includes(teksCari) || m.cerita.toLowerCase().includes(teksCari));
+                return cocokKategori && cocokTeks;
+            });
+
+            if (kumpulanMemori.length === 0) {
+                daftarMemoriDiv.innerHTML = `<p style="color:#6b7280; grid-column: 1/-1; text-align:center; margin-top:40px; font-size:14px;">Belum ada momen terkunci. Ayo simpan kenangan pertamamu!</p>`;
+                return;
+            }
+
+            if (dataHasilFilter.length === 0) {
+                daftarMemoriDiv.innerHTML = `<p style="color:#6b7280; grid-column: 1/-1; text-align:center; margin-top:40px; font-size:14px;">Momen tidak ditemukan.</p>`;
+                return;
+            }
+
+            if(sortOrderNewest) { dataHasilFilter.reverse(); } 
+            dataHasilFilter.sort((a, b) => (b.isPinned === true) - (a.isPinned === true));
+
+            dataHasilFilter.forEach((memori, index) => {
+                const cardContainer3D = document.createElement('div');
+                cardContainer3D.className = 'card-container-3d';
+                
+                let classGlowKat = "kat-liburan";
+                if(memori.kategori.includes("Kuliah")) classGlowKat = "kat-kuliah";
+                if(memori.kategori.includes("Olahraga")) classGlowKat = "kat-olahraga";
+
+                const card = document.createElement('div');
+                card.className = `card-memori ${classGlowKat} ${memori.isPinned ? 'pinned' : ''}`;
+                card.style.animation = `floatIn 0.6s cubic-bezier(0.23, 1, 0.32, 1) both`;
+                card.style.animationDelay = `${index * 0.04}s`;
+                const namaFileDownload = `KapsulWaktu_${memori.judul.replace(/\s+/g, '_')}.png`;
+
+                card.innerHTML = `
+                    <div class="card-glare"></div>
+                    <div class="image-wrapper" onclick="openCinemaLightbox('${memori.foto}')">
+                        <span class="category-badge">${memori.kategori || '🗺️ Liburan'}</span>
+                        <div class="btn-pin-card" onclick="event.stopPropagation(); togglePinMomen(${memori.id})" title="Sematkan Momen">📌</div>
+                        <img src="${memori.foto}">
+                    </div>
+                    <div class="card-content">
+                        <div class="card-date">📅 ${memori.tanggal} ${memori.isPinned ? '• 📌 DISEMATKAN' : ''}</div>
+                        <h3>${memori.judul}</h3>
+                        <p>${memori.cerita}</p>
+                        <div class="card-actions">
+                            <a href="${memori.foto}" download="${namaFileDownload}" class="btn-action-download" onclick="launchToast('Mengunduh foto...')">📥 Unduh Foto</a>
+                            <button class="btn-action-del" onclick="hapusMemori(${memori.id})">Hapus</button>
+                        </div>
+                    </div>
+                `;
+                
+                // LAPTOP CONTROL MATRIX: 3D Parallax Tilt mengikuti gerakan kursor mouse
+                card.addEventListener('mousemove', function(e) {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left; const y = e.clientY - rect.top;
+                    const xc = rect.width / 2; const yc = rect.height / 2;
+                    const rotateX = (yc - y) / 10; const rotateY = (x - xc) / 10;
+                    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+                    const glare = card.querySelector('.card-glare');
+                    glare.style.background = `radial-gradient(circle at ${(x / rect.width) * 100}% ${(y / rect.height) * 100}%, rgba(255,255,255,0.15), transparent 75%)`;
+                });
+
+                card.addEventListener('mouseleave', function() {
+                    card.style.transform = `rotateX(0deg) rotateY(0deg) translateY(0px)`;
+                    const glare = card.querySelector('.card-glare'); glare.style.background = 'transparent';
+                });
+
+                // HP INTERACTIVE SWIPE CONTROL: Fitur aktif miring 3D & efek lampu sentuh saat di-swap/usap jari
+                card.addEventListener('touchmove', function(e) {
+                    const touch = e.touches[0];
+                    const rect = card.getBoundingClientRect();
+                    const x = touch.clientX - rect.left;
+                    const y = touch.clientY - rect.top;
+                    
+                    if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+                        const xc = rect.width / 2; const yc = rect.height / 2;
+                        const rotateX = (yc - y) / 6.5; const rotateY = (x - xc) / 6.5;
+                        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+                        
+                        const glare = card.querySelector('.card-glare');
+                        glare.style.background = `radial-gradient(circle at ${(x / rect.width) * 100}% ${(y / rect.height) * 100}%, rgba(255,255,255,0.22), transparent 68%)`;
+                    }
+                });
+
+                // HP LEAVE DETECTOR: Mengembalikan posisi tegak kartu secara mulus begitu jari diangkat dari layar
+                card.addEventListener('touchend', function() {
+                    card.style.transform = `rotateX(0deg) rotateY(0deg) translateY(0px)`;
+                    const glare = card.querySelector('.card-glare'); glare.style.background = 'transparent';
+                });
+
+                cardContainer3D.appendChild(card);
+                daftarMemoriDiv.appendChild(cardContainer3D);
+            });
+        }
+
+        window.openCinemaLightbox = function(src) {
+            playSciFiSound(500, 'sine', 0.15);
+            const lightbox = document.createElement('div'); lightbox.className = 'premium-lightbox';
+            lightbox.innerHTML = `<img src="${src}">`; document.body.appendChild(lightbox);
+            setTimeout(() => lightbox.classList.add('visible'), 20);
+            lightbox.onclick = function() { lightbox.classList.remove('visible'); playSciFiSound(400, 'sine', 0.08); setTimeout(() => lightbox.remove(), 300); };
+        };
+
+        window.hapusMemori = function(id) {
+            askConfirmation("Apakah kamu yakin ingin menghapus kenangan berharga ini?", async () => {
+                if (isLocalMode()) {
+                    let kumpulanMemori = JSON.parse(localStorage.getItem('kapsulWaktuGitHub')) || [];
+                    kumpulanMemori = kumpulanMemori.filter(m => m.id !== id);
+                    localStorage.setItem('kapsulWaktuGitHub', JSON.stringify(kumpulanMemori));
+                    launchToast("Kenangan berhasil dihapus."); tampilkanMemori();
+                } else {
+                    try {
+                        const response = await fetch('api.php?action=delete', {
+                            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: id })
+                        });
+                        const hasil = await response.json();
+                        if(hasil.success) { launchToast(hasil.message); tampilkanMemori(); }
+                    } catch (err) { launchToast("Gagal menghapus dari server!", false); }
+                }
+            });
+        }
+
+        tampilkanMemori();
+    </script>
+</body>
+</html>
